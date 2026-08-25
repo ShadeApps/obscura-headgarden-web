@@ -1,0 +1,10 @@
+.DS_Store
+.env*
+!.env.example
+.next/
+out/
+coverage/
+node_modules/
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
