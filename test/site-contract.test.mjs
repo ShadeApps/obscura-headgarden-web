@@ -7,6 +7,40 @@ const readRequired = (path) => {
   return readFileSync(path, 'utf8');
 };
 
+const parseHexColor = (value) => {
+  const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(value);
+  assert.ok(match, `${value} must be a six-digit hexadecimal colour`);
+  return match.slice(1).map((component) => Number.parseInt(component, 16));
+};
+
+const relativeLuminance = (value) => {
+  const [red, green, blue] = parseHexColor(value).map((component) => {
+    const channel = component / 255;
+    return channel <= 0.04045
+      ? channel / 12.92
+      : ((channel + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+};
+
+const contrastRatio = (foreground, background) => {
+  const light = Math.max(
+    relativeLuminance(foreground),
+    relativeLuminance(background),
+  );
+  const dark = Math.min(
+    relativeLuminance(foreground),
+    relativeLuminance(background),
+  );
+  return (light + 0.05) / (dark + 0.05);
+};
+
+const colorToken = (css, name) => {
+  const match = new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, 'i').exec(css);
+  assert.ok(match, `--${name} must be a six-digit hexadecimal colour`);
+  return match[1];
+};
+
 test('publishes the approved HeadGarden prelaunch promise', () => {
   const content = readRequired('src/content/site.ts');
 
@@ -127,7 +161,7 @@ test('uses the approved local visual system and accessibility fallbacks', () => 
   const css = readRequired('src/app/globals.css');
 
   for (const token of [
-    '#d63a2e',
+    '#c52f27',
     '#ff6745',
     '#ffb08a',
     '#fff3ea',
@@ -176,5 +210,64 @@ test('uses the approved local visual system and accessibility fallbacks', () => 
   assert.match(
     css,
     /@media \(max-width: 24rem\)[\s\S]*\.not-found h1\s*{[^}]*font-size:\s*min\(/,
+  );
+});
+
+test('keeps normal-sized marketing copy at WCAG AA contrast', () => {
+  const css = readRequired('src/app/globals.css');
+  const palette = Object.fromEntries(
+    ['ember', 'apricot', 'seed', 'soil', 'moss', 'white'].map((name) => [
+      name,
+      colorToken(css, name),
+    ]),
+  );
+
+  for (const [label, foreground, background] of [
+    ['ember on seed', palette.ember, palette.seed],
+    ['seed on ember', palette.seed, palette.ember],
+    ['apricot on soil', palette.apricot, palette.soil],
+    ['white on moss', palette.white, palette.moss],
+  ]) {
+    assert.ok(
+      contrastRatio(foreground, background) >= 4.5,
+      `${label} must reach a 4.5:1 contrast ratio`,
+    );
+  }
+
+  assert.match(
+    css,
+    /\.growth-card \.card-eyebrow\s*{[^}]*color:\s*var\(--apricot\)/s,
+  );
+  assert.match(
+    css,
+    /\.preview-card--orb \.preview-card__chrome,\s*\.preview-card--orb > p\s*{[^}]*color:\s*var\(--white\)/s,
+  );
+  assert.match(
+    css,
+    /\.plan-card--featured \.card-eyebrow,\s*\.plan-card--featured \.plan-card__detail,\s*\.plan-card--featured \.plan-card__price span,\s*\.plan-card--featured li\s*{[^}]*color:\s*var\(--seed\);[^}]*opacity:\s*1/s,
+  );
+  assert.match(
+    css,
+    /\.final-panel \.eyebrow\s*{[^}]*color:\s*var\(--seed\)/s,
+  );
+  assert.match(
+    css,
+    /\.final-panel > p:not\(\.eyebrow\)\s*{[^}]*margin-block-end:\s*1\.8rem;[^}]*color:\s*var\(--seed\)/s,
+  );
+  assert.match(
+    css,
+    /\.boundary-note\s*{[^}]*color:\s*rgb\(38 22 26 \/ 62%\)/s,
+  );
+  assert.match(
+    css,
+    /\.phone-garden__practice-label,\s*\.phone-garden__duration\s*{[^}]*color:\s*rgb\(38 22 26 \/ 62%\)/s,
+  );
+  assert.match(
+    css,
+    /\.preview-card__chrome\s*{[^}]*color:\s*rgb\(38 22 26 \/ 62%\)/s,
+  );
+  assert.match(
+    css,
+    /\.site-footer__copyright\s*{[^}]*color:\s*rgb\(255 243 234 \/ 50%\)/s,
   );
 });

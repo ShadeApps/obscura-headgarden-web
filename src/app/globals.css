@@ -31,7 +31,7 @@
 }
 
 :root {
-  --ember: #d63a2e;
+  --ember: #c52f27;
   --flare: #ff6745;
   --apricot: #ffb08a;
   --seed: #fff3ea;
@@ -322,7 +322,7 @@ ul {
 .boundary-note {
   max-inline-size: 34rem;
   margin-block-end: 0;
-  color: rgb(38 22 26 / 58%);
+  color: rgb(38 22 26 / 62%);
   font-size: 0.82rem;
 }
 
@@ -470,7 +470,7 @@ ul {
 
 .phone-garden__practice-label,
 .phone-garden__duration {
-  color: rgb(38 22 26 / 58%);
+  color: rgb(38 22 26 / 62%);
   font-size: 0.66rem;
 }
 
@@ -706,6 +706,10 @@ ul {
   color: var(--apricot);
 }
 
+.growth-card .card-eyebrow {
+  color: var(--apricot);
+}
+
 .growth-card > div:last-child > p:last-child {
   max-inline-size: 42rem;
   margin-block-end: 0;
@@ -758,12 +762,13 @@ ul {
   justify-content: space-between;
   padding-block-end: 1rem;
   border-block-end: 1px solid currentColor;
-  color: rgb(38 22 26 / 55%);
+  color: rgb(38 22 26 / 62%);
   font-size: 0.68rem;
 }
 
-.preview-card--orb .preview-card__chrome {
-  color: rgb(255 243 234 / 65%);
+.preview-card--orb .preview-card__chrome,
+.preview-card--orb > p {
+  color: var(--white);
 }
 
 .preview-card__sun {
@@ -783,10 +788,6 @@ ul {
 
 .preview-card > p:not(.card-eyebrow) {
   color: rgb(38 22 26 / 68%);
-}
-
-.preview-card--orb > p {
-  color: rgb(255 243 234 / 72%);
 }
 
 .preview-card__button {
@@ -928,11 +929,6 @@ ul {
   background: var(--ember);
 }
 
-.plan-card--featured .card-eyebrow,
-.plan-card--featured .plan-card__detail {
-  color: rgb(255 243 234 / 76%);
-}
-
 .plan-card__flag {
   position: absolute;
   top: 1.2rem;
@@ -981,6 +977,14 @@ ul {
   border-block-end: 1px solid currentColor;
   font-size: 0.83rem;
   opacity: 0.75;
+}
+
+.plan-card--featured .card-eyebrow,
+.plan-card--featured .plan-card__detail,
+.plan-card--featured .plan-card__price span,
+.plan-card--featured li {
+  color: var(--seed);
+  opacity: 1;
 }
 
 .pricing-note {
@@ -1102,9 +1106,13 @@ ul {
   font-size: clamp(2.5rem, 6vw, 6.3rem);
 }
 
+.final-panel .eyebrow {
+  color: var(--seed);
+}
+
 .final-panel > p:not(.eyebrow) {
   margin-block-end: 1.8rem;
-  color: rgb(255 243 234 / 78%);
+  color: var(--seed);
 }
 
 .not-found {
@@ -1210,7 +1218,7 @@ ul {
   margin-block: 2rem 0;
   padding-block-start: 1.5rem;
   border-block-start: 1px solid rgb(255 243 234 / 15%);
-  color: rgb(255 243 234 / 45%);
+  color: rgb(255 243 234 / 50%);
   font-size: 0.72rem;
 }
 
