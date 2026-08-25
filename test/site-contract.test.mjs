@@ -173,4 +173,8 @@ test('uses the approved local visual system and accessibility fallbacks', () => 
     css,
     /@media \(max-width: 24rem\)[\s\S]*\.site-footer__links a\s*{[^}]*overflow-wrap:\s*anywhere/,
   );
+  assert.match(
+    css,
+    /@media \(max-width: 24rem\)[\s\S]*\.not-found h1\s*{[^}]*font-size:\s*min\(/,
+  );
 });

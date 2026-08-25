@@ -1107,6 +1107,56 @@ ul {
   color: rgb(255 243 234 / 78%);
 }
 
+.not-found {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 100svh;
+  padding: var(--section-pad) var(--page-pad);
+  overflow: hidden;
+  color: var(--seed);
+  background: var(--soil);
+  text-align: center;
+  isolation: isolate;
+}
+
+.not-found__contour {
+  position: absolute;
+  z-index: -1;
+  inline-size: min(48rem, 112vw);
+  block-size: min(42rem, 100vw);
+  border: 1px solid rgb(255 176 138 / 45%);
+  border-radius: 48% 52% 43% 57% / 54% 46% 52% 48%;
+  box-shadow: 0 0 0 4rem rgb(255 176 138 / 4%), 0 0 0 8rem rgb(255 176 138 / 3%);
+  transform: rotate(8deg);
+}
+
+.not-found .brand-mark {
+  margin-block-end: 1.8rem;
+}
+
+.not-found .brand-mark__symbol {
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+}
+
+.not-found h1 {
+  max-inline-size: 13ch;
+  margin-block: 0 1.4rem;
+  color: var(--seed);
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+}
+
+.not-found > p:not(.eyebrow) {
+  max-inline-size: 34rem;
+  margin-block-end: 2rem;
+  color: rgb(255 243 234 / 72%);
+}
+
 .site-footer {
   display: grid;
   grid-template-columns: 1.1fr 0.8fr 1.2fr;
@@ -1443,6 +1493,11 @@ ul {
   .site-footer__links a {
     max-inline-size: 100%;
     overflow-wrap: anywhere;
+  }
+
+  .not-found h1 {
+    overflow-wrap: anywhere;
+    font-size: min(2.5rem, 13vw);
   }
 }
 
