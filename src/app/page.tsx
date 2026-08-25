@@ -1,11 +1,31 @@
-import { hero } from '@/content/site';
+import {
+  FaqSection,
+  FinalPanel,
+  GrowthSection,
+  HeroSection,
+  PlansSection,
+  PreviewSection,
+  PrivacySection,
+  SiteFooter,
+  SiteHeader,
+  TensionSection,
+} from '@/components/SiteSections';
 
 export default function Home() {
   return (
-    <main>
-      <h1>{hero.title}</h1>
-      <p>{hero.body}</p>
-      <p>{hero.status}</p>
-    </main>
+    <>
+      <SiteHeader />
+      <main>
+        <HeroSection />
+        <TensionSection />
+        <GrowthSection />
+        <PreviewSection />
+        <PrivacySection />
+        <PlansSection />
+        <FaqSection />
+        <FinalPanel />
+      </main>
+      <SiteFooter />
+    </>
   );
 }
