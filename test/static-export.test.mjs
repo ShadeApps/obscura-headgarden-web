@@ -6,10 +6,14 @@ import test from 'node:test';
 const marketingUrl = 'https://headgarden.codeobscura.com';
 const termsUrl = 'https://codeobscura.com/headgarden/terms.html';
 const privacyUrl = 'https://codeobscura.com/headgarden/privacy.html';
+const appAdsBytes = Buffer.from(
+  'google.com, pub-4562286036873986, DIRECT, f08c47fec0942fa0\n',
+);
 
 const sourceDeliverables = [
   'public/.nojekyll',
   'public/CNAME',
+  'public/app-ads.txt',
   'public/app-icon.png',
   'public/fonts/Unbounded-Medium.ttf',
   'public/fonts/Unbounded-Bold.ttf',
@@ -32,6 +36,7 @@ const exportedDeliverables = [
   'out/sitemap.xml',
   'out/CNAME',
   'out/.nojekyll',
+  'out/app-ads.txt',
   'out/app-icon.png',
   'out/fonts/Unbounded-Medium.ttf',
   'out/fonts/Unbounded-Bold.ttf',
@@ -55,6 +60,7 @@ test('declares the complete static Pages delivery surface', () => {
 
   assert.equal(readFileSync('public/CNAME', 'utf8').trim(), 'headgarden.codeobscura.com');
   assert.equal(statSync('public/.nojekyll').size, 0);
+  assert.deepEqual(readFileSync('public/app-ads.txt'), appAdsBytes);
 
   const notFound = readFileSync('src/app/not-found.tsx', 'utf8');
   assert.match(notFound, /This seed has not been planted/);
@@ -75,6 +81,7 @@ test('declares the complete static Pages delivery surface', () => {
   assert.deepEqual(publicPaths.sort(), [
     '.nojekyll',
     'CNAME',
+    'app-ads.txt',
     'app-icon.png',
     'fonts/GolosText-Regular.ttf',
     'fonts/GolosText-SemiBold.ttf',
@@ -91,6 +98,7 @@ test('keeps any completed export self-contained and policy-safe', () => {
   for (const path of exportedDeliverables) {
     assert.equal(existsSync(path), true, `${path} must exist after build`);
   }
+  assert.deepEqual(readFileSync('out/app-ads.txt'), appAdsBytes);
 
   const index = readFileSync('out/index.html', 'utf8');
   assert.match(index, new RegExp(marketingUrl.replaceAll('.', '\\.')));
