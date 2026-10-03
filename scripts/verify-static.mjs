@@ -3,6 +3,9 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, normalize, relative, resolve } from 'node:path';
 
 const outputRoot = resolve('out');
+const appAdsBytes = Buffer.from(
+  'google.com, pub-4562286036873986, DIRECT, f08c47fec0942fa0\n',
+);
 const requiredFiles = [
   'index.html',
   '404.html',
@@ -10,6 +13,7 @@ const requiredFiles = [
   'sitemap.xml',
   'CNAME',
   '.nojekyll',
+  'app-ads.txt',
   'app-icon.png',
   'fonts/Unbounded-Medium.ttf',
   'fonts/Unbounded-Bold.ttf',
@@ -133,6 +137,7 @@ function verify() {
   for (const path of requiredFiles) {
     assert.equal(existsSync(join(outputRoot, path)), true);
   }
+  assert.deepEqual(readFileSync(join(outputRoot, 'app-ads.txt')), appAdsBytes);
   assert.equal(readFileSync(join(outputRoot, 'CNAME'), 'utf8').trim(), 'headgarden.codeobscura.com');
   assert.equal(statSync(join(outputRoot, '.nojekyll')).size, 0);
 
